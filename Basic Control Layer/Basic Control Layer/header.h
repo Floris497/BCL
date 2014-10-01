@@ -26,25 +26,32 @@ enum {
 };
 
 // ---- script layer ---- //
+
+
+
+
+// ---- access layer ---- //
 int moveForwardWithSpeed(uint8_t speed); //1 to 100
 int moveBackwardWithSpeed(uint8_t speed); //1 to 100
 int moveLeftWithSpeedAndIntensity(uint8_t speed,uint8_t intensity); // both 1 to 100
 int moveRightWithSpeedAndIntensity(uint8_t speed,uint8_t intensity); // both 1 to 100
 int turnRight();
 int turnLeft();
-
-// ---- access layer ---- //
-void moveWithSpeed(int leftSpeed,int rightSpeed);
-
+int turnLeftDegrees(int degrees); // can move more rounds
+int turnRightDegrees(int degrees); // can more more rounds
+int stopCarInTime(int Seconds);
 
 
 // ---- module layer ---- //
-void makeCommandFromSpeed(int leftSpeed,int rightSpeed,I2CData data);
-void sendI2CCommand(I2CData data);
-void getI2CData(I2CData data);
-
+int stopCar();
+int moveWithSpeed(int leftSpeed,int rightSpeed);
+int getDirection(); // return negative ERROR
+int getDistance();
 
 // ---- support layer ---- //
+int makeCommandFromSpeed(int leftSpeed,int rightSpeed,I2CData data);
+int sendI2CCommand(I2CData data);
+I2CData getI2CData(I2CData data);
 
 
 // ---- I2C Manager ---- //
