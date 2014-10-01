@@ -26,6 +26,8 @@
 		70A5203319DC4A59008394E7 /* Basic Control Layer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Basic Control Layer"; sourceTree = BUILT_PRODUCTS_DIR; };
 		70A5203619DC4A59008394E7 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		70A5203D19DC4BC2008394E7 /* header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = header.h; sourceTree = "<group>"; };
+		70A5207419DC8F67008394E7 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../../LICENSE; sourceTree = "<group>"; };
+		70A5207519DC8F67008394E7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +44,7 @@
 		70A5202A19DC4A59008394E7 = {
 			isa = PBXGroup;
 			children = (
+				70A5207319DC8F3C008394E7 /* Other Files */,
 				70A5203519DC4A59008394E7 /* Basic Control Layer */,
 				70A5203419DC4A59008394E7 /* Products */,
 			);
@@ -61,6 +64,16 @@
 				70A5203619DC4A59008394E7 /* main.c */,
 				70A5203D19DC4BC2008394E7 /* header.h */,
 			);
+			path = "Basic Control Layer";
+			sourceTree = "<group>";
+		};
+		70A5207319DC8F3C008394E7 /* Other Files */ = {
+			isa = PBXGroup;
+			children = (
+				70A5207419DC8F67008394E7 /* LICENSE */,
+				70A5207519DC8F67008394E7 /* README.md */,
+			);
+			name = "Other Files";
 			path = "Basic Control Layer";
 			sourceTree = "<group>";
 		};

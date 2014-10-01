@@ -26,8 +26,14 @@ enum {
 };
 
 // ---- script layer ---- //
-
-
+int turnLeftDegrees(int degrees); // can move more rounds
+int turnRightDegrees(int degrees); // can more more rounds
+int stopCarInTime(int Seconds);
+int moveForwardWithSpeedForTime(uint8_t speed,int seconds);
+int movebackwardsWithSpeedForTime(uint8_t speed,int seconds);
+int moveForwardWithSpeedForDistance(uint8_t speed,int meters);
+int movebackwardsWithSpeedForDistance(uint8_t speed,int meters);
+int getDistanceToWall();
 
 
 // ---- access layer ---- //
@@ -35,11 +41,9 @@ int moveForwardWithSpeed(uint8_t speed); //1 to 100
 int moveBackwardWithSpeed(uint8_t speed); //1 to 100
 int moveLeftWithSpeedAndIntensity(uint8_t speed,uint8_t intensity); // both 1 to 100
 int moveRightWithSpeedAndIntensity(uint8_t speed,uint8_t intensity); // both 1 to 100
-int turnRight();
 int turnLeft();
-int turnLeftDegrees(int degrees); // can move more rounds
-int turnRightDegrees(int degrees); // can more more rounds
-int stopCarInTime(int Seconds);
+int turnRight();
+int getDistanceInDirection(int direction);
 
 
 // ---- module layer ---- //
