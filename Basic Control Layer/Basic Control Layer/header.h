@@ -35,6 +35,9 @@ int moveForwardWithSpeedForDistance(uint8_t speed,int meters);
 int movebackwardsWithSpeedForDistance(uint8_t speed,int meters);
 int getDistanceToWall();
 
+int openConnection(int port);
+pthread_t makeMotorThread(void* func);
+
 
 // ---- access layer ---- //
 int moveForwardWithSpeed(uint8_t speed); //1 to 100
@@ -52,6 +55,8 @@ int moveWithSpeed(int leftSpeed,int rightSpeed);
 int getDirection(); // return negative ERROR
 int getDistance();
 int getDistanceTraveled();
+int openSocket(int port,int options);
+
 
 // ---- support layer ---- //
 int makeCommandFromSpeed(int leftSpeed,int rightSpeed,I2CData data);
