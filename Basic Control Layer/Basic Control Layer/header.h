@@ -51,11 +51,15 @@ int stopCar();
 int moveWithSpeed(int leftSpeed,int rightSpeed);
 int getDirection(); // return negative ERROR
 int getDistance();
+int getDistanceTraveled();
 
 // ---- support layer ---- //
 int makeCommandFromSpeed(int leftSpeed,int rightSpeed,I2CData data);
 int sendI2CCommand(I2CData data);
 I2CData getI2CData(I2CData data);
+
+int getWheelCounter();
+int resetWheelCounter();
 
 
 // ---- I2C Manager ---- //
