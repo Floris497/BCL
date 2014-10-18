@@ -9,23 +9,27 @@
 #ifndef Basic_Control_Layer_header_h
 #define Basic_Control_Layer_header_h
 
+enum I2C_MODE{
+    I2C_SEND_MODE,
+    I2C_RECIEVE_MODE
+};
 
 typedef struct I2CDevice {
     uint8_t  I2C_ID;
 } I2CDevice;
 
 typedef struct I2CData {
-    I2CDevice device;
     uint8_t command[10];
     uint8_t commandLength;
 } I2CData;
 
-enum {
-    I2C_SEND_MODE,
-    I2C_RECIEVE_MODE
-};
+typedef struct I2CCommand {
+    I2CDevice device;
+    I2CData data;
+    enum I2C_MODE mode;
+} I2CCommand;
 
-// ---- script layer ---- //
+#pragma mark - Script Layer
 int turnLeftDegrees(int degrees); // can move more rounds
 int turnRightDegrees(int degrees); // can more more rounds
 int stopCarInTime(int Seconds);
@@ -39,7 +43,7 @@ int openConnection(int port);
 pthread_t makeMotorThread(void* func);
 
 
-// ---- access layer ---- //
+#pragma mark - Access Layer
 int moveForwardWithSpeed(uint8_t speed); //1 to 100
 int moveBackwardWithSpeed(uint8_t speed); //1 to 100
 int moveLeftWithSpeedAndIntensity(uint8_t speed,uint8_t intensity); // both 1 to 100
@@ -49,7 +53,7 @@ int turnRight();
 int getDistanceInDirection(int direction);
 
 
-// ---- module layer ---- //
+#pragma mark - Module Layer
 int stopCar();
 int moveWithSpeed(int leftSpeed,int rightSpeed);
 int getDirection(); // return negative ERROR
@@ -58,8 +62,8 @@ int getDistanceTraveled();
 int openSocket(int port,int options);
 
 
-// ---- support layer ---- //
-int makeCommandFromSpeed(int leftSpeed,int rightSpeed,I2CData data);
+#pragma mark - Support Layer
+int makeCommandFromSpeed(int leftSpeed,int rightSpeed,I2CCommand command);
 int sendI2CCommand(I2CData data);
 I2CData getI2CData(I2CData data);
 
@@ -67,8 +71,8 @@ int getWheelCounter();
 int resetWheelCounter();
 
 
-// ---- I2C Manager ---- //
-void I2CTask(I2CData data,int I2C_MODE);
+#pragma mark - I2C Manager
+I2CData I2CTask(I2CCommand command);
 
 
 #endif
