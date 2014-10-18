@@ -39,8 +39,9 @@ int moveForwardWithSpeedForDistance(uint8_t speed,int meters);
 int movebackwardsWithSpeedForDistance(uint8_t speed,int meters);
 int getDistanceToWall();
 
+void Initialize();
+
 int openConnection(int port);
-pthread_t makeMotorThread(void* func);
 
 
 #pragma mark - Access Layer
@@ -51,6 +52,8 @@ int moveRightWithSpeedAndIntensity(uint8_t speed,uint8_t intensity); // both 1 t
 int turnLeft();
 int turnRight();
 int getDistanceInDirection(int direction);
+
+pthread_t makeMotorThread(void* func);
 
 
 #pragma mark - Module Layer

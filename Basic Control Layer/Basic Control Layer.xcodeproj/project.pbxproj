@@ -25,9 +25,10 @@
 /* Begin PBXFileReference section */
 		70A5203319DC4A59008394E7 /* Basic Control Layer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Basic Control Layer"; sourceTree = BUILT_PRODUCTS_DIR; };
 		70A5203619DC4A59008394E7 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		70A5203D19DC4BC2008394E7 /* header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = header.h; sourceTree = "<group>"; };
 		70A5207419DC8F67008394E7 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../../LICENSE; sourceTree = "<group>"; };
 		70A5207519DC8F67008394E7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
+		70B4ABAD19F2B4EC00C29B54 /* BCL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCL.h; sourceTree = "<group>"; };
+		70B4ABAE19F2B60F00C29B54 /* LowLevel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LowLevel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +63,8 @@
 			isa = PBXGroup;
 			children = (
 				70A5203619DC4A59008394E7 /* main.c */,
-				70A5203D19DC4BC2008394E7 /* header.h */,
+				70B4ABAD19F2B4EC00C29B54 /* BCL.h */,
+				70B4ABAE19F2B60F00C29B54 /* LowLevel.h */,
 			);
 			path = "Basic Control Layer";
 			sourceTree = "<group>";
