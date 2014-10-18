@@ -7,7 +7,7 @@
 //
 
 #include <stdio.h>
-#include "header.h"
+#include "BCLFunctions.h"
 
 int main(int argc, const char * argv[]) {
 

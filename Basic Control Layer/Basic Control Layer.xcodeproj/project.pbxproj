@@ -249,6 +249,7 @@
 				70A5203C19DC4A59008394E7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
