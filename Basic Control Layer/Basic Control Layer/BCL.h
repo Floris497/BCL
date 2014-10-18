@@ -5,77 +5,81 @@
 //  Created by Floris Fredrikze on 01/10/14.
 //  Copyright (c) 2014 MiniMind. All rights reserved.
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+
+
 
 #ifndef Basic_Control_Layer_header_h
 #define Basic_Control_Layer_header_h
 
-enum I2C_MODE{
-    I2C_SEND_MODE,
-    I2C_RECIEVE_MODE
-};
+#include <stdio.h>
 
-typedef struct I2CDevice {
-    uint8_t  I2C_ID;
-} I2CDevice;
-
-typedef struct I2CData {
-    uint8_t command[10];
-    uint8_t commandLength;
-} I2CData;
-
-typedef struct I2CCommand {
-    I2CDevice device;
-    I2CData data;
-    enum I2C_MODE mode;
-} I2CCommand;
+#include "LowLevel.h"
 
 #pragma mark - Script Layer
-int turnLeftDegrees(int degrees); // can move more rounds
-int turnRightDegrees(int degrees); // can more more rounds
-int stopCarInTime(int Seconds);
-int moveForwardWithSpeedForTime(uint8_t speed,int seconds);
-int movebackwardsWithSpeedForTime(uint8_t speed,int seconds);
-int moveForwardWithSpeedForDistance(uint8_t speed,int meters);
-int movebackwardsWithSpeedForDistance(uint8_t speed,int meters);
-int getDistanceToWall();
+/*TODO*/ int turnLeftDegrees(int degrees);
+/*TODO*/ int turnRightDegrees(int degrees);
+/*TODO*/ int stopCarInTime(int Seconds);
+/*TODO*/ int moveForwardWithSpeedForTime(int8_t speed,int seconds);
+/*TODO*/ int movebackwardsWithSpeedForTime(int8_t speed,int seconds);
+/*TODO*/ int moveForwardWithSpeedForDistance(int8_t speed,int meters);
+/*TODO*/ int movebackwardsWithSpeedForDistance(int8_t speed,int meters);
+/*TODO*/ int getDistanceToWall();
+/*TODO*/ int stopCar();
 
-void Initialize();
+/*TODO*/ void Initialize();
 
-int openConnection(int port);
+/*TODO*/ int openConnection(int port);
 
 
 #pragma mark - Access Layer
-int moveForwardWithSpeed(uint8_t speed); //1 to 100
-int moveBackwardWithSpeed(uint8_t speed); //1 to 100
-int moveLeftWithSpeedAndIntensity(uint8_t speed,uint8_t intensity); // both 1 to 100
-int moveRightWithSpeedAndIntensity(uint8_t speed,uint8_t intensity); // both 1 to 100
-int turnLeft();
-int turnRight();
-int getDistanceInDirection(int direction);
-
-pthread_t makeMotorThread(void* func);
+/*TODO*/ int moveForwardWithSpeed(int8_t speed); //1 to 100
+/*TODO*/ int moveBackwardWithSpeed(int8_t speed); //1 to 100
+/*TODO*/ int moveLeftWithSpeedAndIntensity(int8_t speed,uint8_t intensity); // both 1 to 100
+/*TODO*/ int moveRightWithSpeedAndIntensity(int8_t speed,uint8_t intensity); // both 1 to 100
+/*TODO*/ int turnLeft();
+/*TODO*/ int turnRight();
+/*TODO*/ int getDistanceInDirection(int direction);
+/*TODO*/ int makeMotorThread(void* func,pthread_t *thread);
+/*TODO*/ int stopMotors();
+/*TODO*/ int stopThread();
 
 
 #pragma mark - Module Layer
-int stopCar();
-int moveWithSpeed(int leftSpeed,int rightSpeed);
-int getDirection(); // return negative ERROR
-int getDistance();
-int getDistanceTraveled();
-int openSocket(int port,int options);
+/*TODO*/ int moveWithSpeed(int16_t leftSpeed,int16_t rightSpeed);
+/*TODO*/ int getDirection(); // return negative ERROR
+/*TODO*/ int getDistance();
+/*TODO*/ int getDistanceTraveled();
+/*TODO*/ int openSocket(int port,int options);
 
 
 #pragma mark - Support Layer
-int makeCommandFromSpeed(int leftSpeed,int rightSpeed,I2CCommand command);
-int sendI2CCommand(I2CData data);
-I2CData getI2CData(I2CData data);
+I2CData makeI2CDataFromSpeed(int16_t leftSpeed,int16_t rightSpeed,I2CData data);
+int sendI2CCommand(I2CData data,I2CDevice device);
+I2CData getI2CData(I2CData data,I2CDevice device);
 
 int getWheelCounter();
 int resetWheelCounter();
 
 
-#pragma mark - I2C Manager
-I2CData I2CTask(I2CCommand command);
-
-
 #endif
+
+
+
+

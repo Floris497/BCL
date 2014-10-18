@@ -30,3 +30,7 @@
 
 # Rubish
 *.xcodeproj
+
+*.pbxproj
+
+*.xcuserstate
