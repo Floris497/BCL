@@ -27,7 +27,7 @@
 
 #include "BCL.h"
 
-I2CData makeI2CDataFromSpeed(int16_t leftSpeed,int16_t rightSpeed,I2CData data){
+I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed,I2CData data){
     BCLWheel rWheel,lWheel;
 
     rWheel = getBCLWheelFromSpeed(rightSpeed, kMaxSpeedValue);

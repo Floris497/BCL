@@ -57,7 +57,7 @@ typedef struct I2CDevice {
 
 typedef struct I2CData {
     uint8_t command[10];
-    uint8_t commandLength;
+    unsigned int commandLength;
 } I2CData;
 
 typedef struct I2CCommand {
@@ -71,11 +71,11 @@ I2CData I2CTask(I2CCommand command);
 
 
 #pragma mark - Support Functions
-BCLWheel getBCLWheelFromSpeed(int16_t speed,uint16_t maxSpeed);
+BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed);
+
 
 #pragma mark - Low Level Support Functions
-uint16_t maxSpeedCheck(uint16_t speed,uint16_t max);
-
+unsigned int maxSpeedCheck(unsigned int speed,unsigned int max);
 uint8_t getHigh8bits(uint16_t number);
 uint8_t getLow8bits(uint16_t number);
 

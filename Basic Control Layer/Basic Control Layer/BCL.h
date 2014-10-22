@@ -36,10 +36,10 @@
 /*TODO*/ int turnLeftDegrees(int degrees);
 /*TODO*/ int turnRightDegrees(int degrees);
 /*TODO*/ int stopCarInTime(int Seconds);
-/*TODO*/ int moveForwardWithSpeedForTime(int8_t speed,int seconds);
-/*TODO*/ int movebackwardsWithSpeedForTime(int8_t speed,int seconds);
-/*TODO*/ int moveForwardWithSpeedForDistance(int8_t speed,int meters);
-/*TODO*/ int movebackwardsWithSpeedForDistance(int8_t speed,int meters);
+/*TODO*/ int moveForwardWithSpeedForTime(int speed,int seconds);
+/*TODO*/ int movebackwardsWithSpeedForTime(int speed,int seconds);
+/*TODO*/ int moveForwardWithSpeedForDistance(int speed,int meters);
+/*TODO*/ int movebackwardsWithSpeedForDistance(int speed,int meters);
 /*TODO*/ int getDistanceToWall();
 /*TODO*/ int stopCar();
 
@@ -49,10 +49,10 @@
 
 
 #pragma mark - Access Layer
-/*TODO*/ int moveForwardWithSpeed(int8_t speed); //1 to 100
-/*TODO*/ int moveBackwardWithSpeed(int8_t speed); //1 to 100
-/*TODO*/ int moveLeftWithSpeedAndIntensity(int8_t speed,uint8_t intensity); // both 1 to 100
-/*TODO*/ int moveRightWithSpeedAndIntensity(int8_t speed,uint8_t intensity); // both 1 to 100
+/*TODO*/ int moveForwardWithSpeed(int speed); //1 to 100
+/*TODO*/ int moveBackwardWithSpeed(int speed); //1 to 100
+/*TODO*/ int moveLeftWithSpeedAndIntensity(int speed,unsigned int intensity); // both 1 to 100
+/*TODO*/ int moveRightWithSpeedAndIntensity(int speed,unsigned int intensity); // both 1 to 100
 /*TODO*/ int turnLeft();
 /*TODO*/ int turnRight();
 /*TODO*/ int getDistanceInDirection(int direction);
@@ -62,15 +62,15 @@
 
 
 #pragma mark - Module Layer
-/*TODO*/ int moveWithSpeed(int16_t leftSpeed,int16_t rightSpeed);
+/*TODO*/ int moveWithSpeed(int leftSpeed,int rightSpeed);
 /*TODO*/ int getDirection(); // return negative ERROR
-/*TODO*/ int getDistance();
+/*TODO*/ int getDistanceToWallInDirection(unsigned int direction);
 /*TODO*/ int getDistanceTraveled();
 /*TODO*/ int openSocket(int port,int options);
 
 
 #pragma mark - Support Layer
-I2CData makeI2CDataFromSpeed(int16_t leftSpeed,int16_t rightSpeed,I2CData data);
+I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed,I2CData data);
 int sendI2CCommand(I2CData data,I2CDevice device);
 I2CData getI2CData(I2CData data,I2CDevice device);
 

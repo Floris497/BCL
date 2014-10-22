@@ -57,7 +57,7 @@ I2CData I2CTask(I2CCommand command) {
 }
 
 #pragma mark - Support Functions
-BCLWheel getBCLWheelFromSpeed(int16_t speed,uint16_t maxSpeed) {
+BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed) {
     BCLWheel wheel;
     
     if (speed < 0) {
@@ -76,7 +76,7 @@ BCLWheel getBCLWheelFromSpeed(int16_t speed,uint16_t maxSpeed) {
 }
 
 #pragma mark - Low Level Support Functions
-uint16_t maxSpeedCheck(uint16_t speed,uint16_t max) {
+unsigned int maxSpeedCheck(unsigned int speed,unsigned int max) {
     return (speed > max) ? max : speed;
 }
 
