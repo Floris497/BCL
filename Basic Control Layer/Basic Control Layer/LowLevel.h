@@ -28,10 +28,24 @@
 #ifndef __Basic_Control_Layer__LowLevel__
 #define __Basic_Control_Layer__LowLevel__
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
 #include <stdbool.h>
+#include <unistd.h>
+#include <string.h>
+#include <math.h>
+#include <pthread.h>
+#include <signal.h>
+#include "rpiGpio.h"
+#include <wiringPi.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <poll.h>
+#include <errno.h>
+#include <arpa/inet.h>
 
 #define kMaxSpeedValue 1023
 #define kMotorDualSideCommand 7
@@ -67,6 +81,8 @@ typedef struct I2CCommand {
     kI2CMode mode;
 } I2CCommand;
 
+typedef int BCLSocket;
+
 #pragma mark - I2C Manager
 I2CData I2CTask(I2CCommand command);
 
@@ -79,6 +95,8 @@ BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed);
 unsigned int maxSpeedCheck(unsigned int speed,unsigned int max);
 uint8_t getHigh8bits(uint16_t number);
 uint8_t getLow8bits(uint16_t number);
+void BCLLog(char* msg);
+void BCLError(char *msg);
 
 
 #endif /* defined(__Basic_Control_Layer__LowLevel__) */
