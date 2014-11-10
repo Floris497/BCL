@@ -36,9 +36,8 @@
 #include <string.h>
 #include <math.h>
 #include <pthread.h>
-#include <signal.h>
-#include "rpiGpio.h"
-#include <wiringPi.h>
+//#include "rpiGpio.h"
+//#include <wiringPi.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>

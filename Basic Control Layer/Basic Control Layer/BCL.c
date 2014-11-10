@@ -63,6 +63,12 @@ BCLSocket openSocket(int portNumber, int options){
     return socket;
 }
 
+int moveWithSpeed(int leftSpeed,int rightSpeed) {
+    // TODO: Make this code :)
+    return 0;
+}
+
+
 #pragma mark - Support Layer
 I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed,I2CData data){
     BCLWheel rightWheel,leftWheel;
