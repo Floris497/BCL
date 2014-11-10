@@ -56,14 +56,13 @@
 /*TODO*/ int turnLeft();
 /*TODO*/ int turnRight();
 /*TODO*/ int getDistanceInDirection(int direction);
-/*TODO*/ int makeMotorThread(void* func,pthread_t *thread);
-/*TODO*/ int stopMotors();
-/*TODO*/ int stopThread();
-
 
 #pragma mark - Module Layer
+/*TODO*/ int startMotorThread(void* func);
+/*TODO*/ int stopThread(pthread_t thread);
+/*TODO*/ int stopMotors();
 /*TODO*/ int moveWithSpeed(int leftSpeed,int rightSpeed);
-/*TODO*/ int getDirection(); // return negative ERROR
+/*TODO*/ int getDirection(); 
 /*TODO*/ int getDistanceToWallInDirection(unsigned int direction);
 /*TODO*/ int getDistanceTraveled();
 /*TODO*/ int openSocket(int port,int options);

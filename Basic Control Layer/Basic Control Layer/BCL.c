@@ -27,20 +27,32 @@
 
 #include "BCL.h"
 
-I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed,I2CData data){
-    BCLWheel rWheel,lWheel;
+#pragma mark - Access Layer
 
-    rWheel = getBCLWheelFromSpeed(rightSpeed, kMaxSpeedValue);
-    lWheel = getBCLWheelFromSpeed(leftSpeed, kMaxSpeedValue);
+int startMotorThread(void* func) {
+    return 0;
+}
+int stopThread(pthread_t thread) {
+    return 0;
+}
+
+
+
+#pragma mark - Support Layer
+I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed,I2CData data){
+    BCLWheel rightWheel,leftWheel;
+
+    rightWheel = getBCLWheelFromSpeed(rightSpeed, kMaxSpeedValue);
+    leftWheel = getBCLWheelFromSpeed(leftSpeed, kMaxSpeedValue);
     
     data.commandLength = 7;
     data.command[0] = kMotorDualSideCommand;
-    data.command[1] = getHigh8bits(rWheel.speed);
-    data.command[2] = getLow8bits(rWheel.speed);
-    data.command[3] = getLow8bits(rWheel.direction);
-    data.command[4] = getHigh8bits(lWheel.speed);
-    data.command[5] = getLow8bits(lWheel.speed);
-    data.command[6] = getLow8bits(lWheel.direction);
+    data.command[1] = getHigh8bits(rightWheel.speed);
+    data.command[2] = getLow8bits(rightWheel.speed);
+    data.command[3] = getLow8bits(rightWheel.direction);
+    data.command[4] = getHigh8bits(leftWheel.speed);
+    data.command[5] = getLow8bits(leftWheel.speed);
+    data.command[6] = getLow8bits(leftWheel.direction);
     
     return data;
 }

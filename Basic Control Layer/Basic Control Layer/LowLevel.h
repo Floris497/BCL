@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <stdbool.h>
 
 #define kMaxSpeedValue 1023
 #define kMotorDualSideCommand 7
@@ -41,15 +42,15 @@ typedef enum kWheelDirection {
     kWheelDirectionBackwards
 } kWheelDirection;
 
-typedef enum kI2CMode {
-    kI2CModeSend,
-    kI2CModeRecieve
-} kI2CMode;
-
 typedef struct BCLWheel {
     uint16_t speed;
     kWheelDirection direction;
 } BCLWheel ;
+
+typedef enum kI2CMode {
+    kI2CModeSend,
+    kI2CModeRecieve
+} kI2CMode;
 
 typedef struct I2CDevice {
     uint8_t  I2C_ID;
