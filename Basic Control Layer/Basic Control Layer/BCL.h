@@ -65,7 +65,7 @@
 /*TODO*/ int getDirection(); 
 /*TODO*/ int getDistanceToWallInDirection(unsigned int direction);
 /*TODO*/ int getDistanceTraveled();
-/*TODO*/ int openSocket(int port,int options);
+BCLSocket openSocket(int portNumber,int options);
 
 
 #pragma mark - Support Layer

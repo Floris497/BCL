@@ -47,7 +47,7 @@ I2CData I2CTask(I2CCommand command) {
         gpioI2cReadData(&command.data.command,command.data.commandLength);
     }
     else {
-        printf("ERROR: wrong mode specified");
+        BCLError("wrong mode specified");
     }
     // It is now safe to unlock the function
     pthread_mutex_unlock(&I2CMutex);
@@ -88,5 +88,14 @@ uint8_t getLow8bits(uint16_t number) {
     return number &  0xFF;
 }
 
+void BCLLog(char* msg){
+    printf(msg);
+    fflush(stdout);
+}
 
+void BCLError(char *msg) {
+    perror(msg);
+    fflush(stderr);
+    exit(1);
+}
 

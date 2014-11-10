@@ -37,6 +37,31 @@ int stopThread(pthread_t thread) {
 }
 
 
+#pragma mark - Module Layer
+
+BCLSocket openSocket(int portNumber, int options){
+    int sockfd;
+    socklen_t clilen;
+    struct sockaddr_in serv_addr, cli_addr;
+
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0)
+       BCLError("fault with opening socket");
+    bzero((char *) &serv_addr, sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = INADDR_ANY;
+    serv_addr.sin_port = htons(portNumber);
+    if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
+       BCLError("fault on binding socket");
+
+    listen(sockfd,5);
+    BCLLog("Waiting for socket connection");
+    clilen = sizeof(cli_addr);
+    BCLSocket socket = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
+    BCLLog("Socket connected");
+
+    return socket;
+}
 
 #pragma mark - Support Layer
 I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed,I2CData data){
