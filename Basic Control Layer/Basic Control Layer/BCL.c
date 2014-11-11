@@ -1,5 +1,5 @@
 //
-//  main.c
+//  BCL.c
 //  Basic Control Layer
 //
 //  Created by Floris Fredrikze on 01/10/14.
@@ -40,6 +40,7 @@ int stopThread(pthread_t thread) {
 #pragma mark - Module Layer
 
 BCLSocket openSocket(int portNumber, int options){
+    
     int sockfd;
     socklen_t clilen;
     struct sockaddr_in serv_addr, cli_addr;

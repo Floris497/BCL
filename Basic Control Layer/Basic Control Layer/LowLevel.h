@@ -38,6 +38,7 @@
 #include <pthread.h>
 //#include "rpiGpio.h"
 //#include <wiringPi.h>
+#include <signal.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -55,15 +56,15 @@ typedef enum kWheelDirection {
     kWheelDirectionBackwards
 } kWheelDirection;
 
-typedef struct BCLWheel {
-    uint16_t speed;
-    kWheelDirection direction;
-} BCLWheel ;
-
 typedef enum kI2CMode {
     kI2CModeSend,
     kI2CModeRecieve
 } kI2CMode;
+
+typedef struct BCLWheel {
+    uint16_t speed;
+    kWheelDirection direction;
+} BCLWheel ;
 
 typedef struct I2CDevice {
     uint8_t  I2C_ID;
@@ -89,12 +90,11 @@ I2CData I2CTask(I2CCommand command);
 #pragma mark - Support Functions
 BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed);
 
-
 #pragma mark - Low Level Support Functions
 unsigned int maxSpeedCheck(unsigned int speed,unsigned int max);
 uint8_t getHigh8bits(uint16_t number);
 uint8_t getLow8bits(uint16_t number);
-void BCLLog(char* msg);
+void BCLLog(char *msg);
 void BCLError(char *msg);
 
 

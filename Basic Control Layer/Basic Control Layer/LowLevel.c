@@ -89,7 +89,7 @@ uint8_t getLow8bits(uint16_t number) {
 }
 
 void BCLLog(char* msg){
-    printf(msg);
+    puts(msg);
     fflush(stdout);
 }
 

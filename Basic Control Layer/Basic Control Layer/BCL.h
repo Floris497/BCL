@@ -1,5 +1,5 @@
 //
-//  header.h
+//  BCL.h
 //  Basic Control Layer
 //
 //  Created by Floris Fredrikze on 01/10/14.
