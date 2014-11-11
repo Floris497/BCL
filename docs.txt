@@ -20,4 +20,12 @@ Awnser: numbers are send in human readable chars (send "0600" for 600)
   distance:'DT' [03-10]
         [03-06] 0 to 9999 cm (0 = no distance availible)
         [07-10] -180 to 180 direction of mesearment (send "-180" for -180º and "0180" for 180º)
-  
+
+Instruction: instructions are most of the time send from the client to the robot, for movement.
+    drive:'DR'
+        [03-07] left speed "-1024" to "01024"
+        [08-12] left speed "-1024" to "01024"
+     stop:'ST' (does not need more than 3 bytes)
+    
+
+

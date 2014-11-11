@@ -35,16 +35,16 @@ I2CData I2CTask(I2CCommand command) {
     pthread_mutex_lock(&I2CMutex);
     
     // Set 7bit slave for communication with the right device
-    gpioI2cSet7BitSlave(command.device);
+    //DT gpioI2cSet7BitSlave(command.device);
     
     // Determine if data must be send or recieved
     if (command.mode == kI2CModeSend) {
         // Send data to device
-        gpioI2cWriteData(command.data.command,command.data.commandLength);
+        //DT gpioI2cWriteData(command.data.command,command.data.commandLength);
     }
     else if (command.mode == kI2CModeRecieve) {
         // Read from device
-        gpioI2cReadData(&command.data.command,command.data.commandLength);
+        //DT gpioI2cReadData(&command.data.command,command.data.commandLength);
     }
     else {
         BCLError("wrong mode specified");
@@ -89,13 +89,12 @@ uint8_t getLow8bits(uint16_t number) {
 }
 
 void BCLLog(char* msg){
-    puts(msg);
+    printf("%s\n",msg);
     fflush(stdout);
 }
 
 void BCLError(char *msg) {
-    perror(msg);
-    fflush(stderr);
-    exit(1);
+    printf(ANSI_COLOR_RED "Error: %s" ANSI_COLOR_RESET "\n",msg);
+    fflush(stdout);
 }
 

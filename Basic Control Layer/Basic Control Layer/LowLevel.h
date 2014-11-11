@@ -47,6 +47,8 @@
 #include <errno.h>
 #include <arpa/inet.h>
 
+#include "colors.h"
+
 #define kMaxSpeedValue 1023
 #define kMotorDualSideCommand 7
 
