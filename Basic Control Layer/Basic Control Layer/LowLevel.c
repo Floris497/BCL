@@ -75,6 +75,11 @@ BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed) {
     return wheel;
 }
 
+int initConnections() {
+    
+    return 0;
+}
+
 #pragma mark - Low Level Support Functions
 unsigned int maxSpeedCheck(unsigned int speed,unsigned int max) {
     return (speed > max) ? max : speed;

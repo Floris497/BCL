@@ -91,6 +91,7 @@ I2CData I2CTask(I2CCommand command);
 
 #pragma mark - Support Functions
 BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed);
+int initConnections();
 
 #pragma mark - Low Level Support Functions
 unsigned int maxSpeedCheck(unsigned int speed,unsigned int max);
