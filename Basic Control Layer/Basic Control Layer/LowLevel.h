@@ -98,6 +98,7 @@ uint8_t getHigh8bits(uint16_t number);
 uint8_t getLow8bits(uint16_t number);
 void BCLLog(char *msg);
 void BCLError(char *msg);
+char* substring(const char* str, size_t begin, size_t len);
 
 
 #endif /* defined(__Basic_Control_Layer__LowLevel__) */
