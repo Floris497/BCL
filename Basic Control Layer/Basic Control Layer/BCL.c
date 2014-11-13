@@ -29,15 +29,48 @@
 
 #pragma mark - Access Layer
 
-int startMotorThread(void* func) {
-    return 0;
-}
-int stopThread(pthread_t thread) {
-    return 0;
-}
-
 
 #pragma mark - Module Layer
+
+int init() {
+    initRaspberryConnections();
+    return 0;
+}
+
+pthread_t startThread(void* func) {
+    pthread_t tid;
+    pthread_create(&tid, NULL, func, NULL);
+    return tid;
+}
+
+int stopThread(pthread_t thread) {
+    stopMotors();
+    pthread_cancel(thread);
+    return 0;
+}
+
+int stopMotors() {
+    moveWithSpeed(0, 0);
+    return 0;
+}
+
+int moveWithSpeed(int leftSpeed,int rightSpeed) {
+    
+    I2CData data;
+    data = makeI2CDataFromSpeed(leftSpeed, rightSpeed);
+    
+    I2CDevice device;
+    device.I2C_ID = kMotorBoardID;
+    
+    I2CCommand command;
+    command.data = data;
+    command.device = device;
+    command.mode = kI2CModeSend;
+    
+    I2CTask(command);
+    
+    return 0;
+}
 
 BCLSocket openSocket(int portNumber, int options){
     
@@ -46,45 +79,56 @@ BCLSocket openSocket(int portNumber, int options){
     struct sockaddr_in serv_addr, cli_addr;
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    
     if (sockfd < 0)
-       BCLError("fault with opening socket");
+       BCLError("not able to open");
+    
     bzero((char *) &serv_addr, sizeof(serv_addr));
+    
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(portNumber);
+    
     if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
-       BCLError("fault on binding socket");
+       BCLError("not able to bind");
 
     listen(sockfd,5);
-    BCLLog("Waiting for socket connection");
     clilen = sizeof(cli_addr);
+  
+    BCLLog("Ready for incomming connection");
     BCLSocket socket = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
-    BCLLog("Socket connected");
+    BCLLog(ANSI_COLOR_GREEN"Socket connected"ANSI_COLOR_RESET);
 
     return socket;
 }
 
-int moveWithSpeed(int leftSpeed,int rightSpeed) {
-    // TODO: Make this code :)
+int doBackGroundTaskWithCallback(void* callbackFunction) {
+    startThread(callbackFunction);
     return 0;
 }
 
 
 #pragma mark - Support Layer
-I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed,I2CData data){
+I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed){
+    
+    I2CData data;
     BCLWheel rightWheel,leftWheel;
 
     rightWheel = getBCLWheelFromSpeed(rightSpeed, kMaxSpeedValue);
     leftWheel = getBCLWheelFromSpeed(leftSpeed, kMaxSpeedValue);
     
+    char *buffer = malloc(100);
+    snprintf(buffer, sizeof(buffer), "RS:%d - RD:%d : LS:%d - LD:%d\n",rightWheel.speed,rightWheel.direction,leftWheel.speed,leftWheel.direction);
+    BCLMark(buffer);
+    
     data.commandLength = 7;
     data.command[0] = kMotorDualSideCommand;
     data.command[1] = getHigh8bits(rightWheel.speed);
     data.command[2] = getLow8bits(rightWheel.speed);
-    data.command[3] = getLow8bits(rightWheel.direction);
+    data.command[3] = rightWheel.direction;
     data.command[4] = getHigh8bits(leftWheel.speed);
     data.command[5] = getLow8bits(leftWheel.speed);
-    data.command[6] = getLow8bits(leftWheel.direction);
+    data.command[6] = leftWheel.direction;
     
     return data;
 }

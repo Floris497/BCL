@@ -51,6 +51,7 @@
 
 #define kMaxSpeedValue 1023
 #define kMotorDualSideCommand 7
+#define kMotorBoardID 0x32
 
 typedef enum kWheelDirection {
     kWheelDirectionNoDirection,
@@ -91,14 +92,15 @@ I2CData I2CTask(I2CCommand command);
 
 #pragma mark - Support Functions
 BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed);
-int initConnections();
+int initRaspberryConnections();
 
 #pragma mark - Low Level Support Functions
 unsigned int maxSpeedCheck(unsigned int speed,unsigned int max);
 uint8_t getHigh8bits(uint16_t number);
 uint8_t getLow8bits(uint16_t number);
-void BCLLog(char *msg);
-void BCLError(char *msg);
+void BCLLog(char *log);
+void BCLError(char *err);
+void BCLMark(char *mark);
 char* substring(const char* str, size_t begin, size_t len);
 
 

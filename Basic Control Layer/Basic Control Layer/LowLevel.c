@@ -75,8 +75,24 @@ BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed) {
     return wheel;
 }
 
-int initConnections() {
+int initRaspberryConnections() {
+//    uint8_t totalPower[2] = {4,255}; // command to set glabal power to 255 (4: command to set glabal power)
+//    uint8_t softStart[3] = {0x91,23,0}; // command to turn off "DC softstart"? (EEPROM addres 23 to 0) (0x91: command to change EEPROM)
     
+    BCLMark("Init Connections Started");
+
+//    if (gpioSetup()!= OK)
+//        BCLError("gpio setup Failed");
+//    if (gpioI2cSetup() != OK)
+//        BCLError("I2C setup Failed");
+//    if (gpioI2cSet7BitSlave(0x32) != OK)
+//        BCLError("gpioI2cSet7BitSlave failed");
+//    if (gpioI2cWriteData(&totalPower[0], 2) != OK)
+//        BCLError("gpioI2cWriteData failed");
+//    if (gpioI2cWriteData(&softStart[0],3) != OK);
+//        BCLError("gpioI2cWriteData failed");
+    
+    BCLMark("Init Connections Ended");
     return 0;
 }
 
@@ -93,15 +109,21 @@ uint8_t getLow8bits(uint16_t number) {
     return number &  0xFF;
 }
 
-void BCLLog(char* msg){
-    printf("%s\n",msg);
+void BCLLog(char* log){
+    printf("Log: %s\n",log);
     fflush(stdout);
 }
 
-void BCLError(char *msg) {
-    printf(ANSI_COLOR_RED "Error: %s" ANSI_COLOR_RESET "\n",msg);
+void BCLError(char *err) {
+    printf(ANSI_COLOR_RED "Error: %s" ANSI_COLOR_RESET "\n",err);
     fflush(stdout);
 }
+
+void BCLMark(char *mark) {
+    printf(ANSI_COLOR_RED "Mark: %s" ANSI_COLOR_RESET "\n",mark);
+    fflush(stdout);
+}
+
 
 
 char* substring(const char* str, size_t begin, size_t len) {
@@ -109,4 +131,6 @@ char* substring(const char* str, size_t begin, size_t len) {
         return 0;
     return strndup(str + begin, len);
 }
+
+
 

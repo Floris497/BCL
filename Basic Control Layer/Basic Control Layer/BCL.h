@@ -43,11 +43,6 @@
 /*TODO*/ int getDistanceToWall();
 /*TODO*/ int stopCar();
 
-/*TODO*/ void Initialize();
-
-/*TODO*/ int openConnection(int port);
-
-
 #pragma mark - Access Layer
 /*TODO*/ int moveForwardWithSpeed(int speed); //1 to 100
 /*TODO*/ int moveBackwardWithSpeed(int speed); //1 to 100
@@ -58,18 +53,20 @@
 /*TODO*/ int getDistanceInDirection(int direction);
 
 #pragma mark - Module Layer
-/*TODO*/ int startMotorThread(void* func);
-/*TODO*/ int stopThread(pthread_t thread);
-/*TODO*/ int stopMotors();
-/*TODO*/ int moveWithSpeed(int leftSpeed,int rightSpeed);
-/*TODO*/ int getDirection(); 
+int init();
+pthread_t startThread(void* func);
+int stopThread(pthread_t thread);
+int stopMotors();
+int moveWithSpeed(int leftSpeed,int rightSpeed);
+/*TODO*/ int getDirection();
 /*TODO*/ int getDistanceToWallInDirection(unsigned int direction);
 /*TODO*/ int getDistanceTraveled();
 BCLSocket openSocket(int portNumber,int options);
+int doBackGroundTaskWithCallback(void* callbackFunction);
 
 
 #pragma mark - Support Layer
-I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed,I2CData data);
+I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed);
 int sendI2CCommand(I2CData data,I2CDevice device);
 I2CData getI2CData(I2CData data,I2CDevice device);
 
