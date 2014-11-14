@@ -26,6 +26,7 @@
 
 
 #include "BCL.h"
+#include "BCLParse.h"
 
 #pragma mark - Access Layer
 
@@ -37,16 +38,13 @@ int init() {
     return 0;
 }
 
-pthread_t startThread(void* func) {
-    pthread_t tid;
-    pthread_create(&tid, NULL, func, NULL);
-    return tid;
+int joinThread(pthread_t thread) {
+    return pthread_join(thread, NULL);
 }
 
 int stopThread(pthread_t thread) {
     stopMotors();
-    pthread_cancel(thread);
-    return 0;
+    return pthread_cancel(thread);
 }
 
 int stopMotors() {
@@ -73,6 +71,10 @@ int moveWithSpeed(int leftSpeed,int rightSpeed) {
 }
 
 BCLSocket openSocket(int portNumber, int options){
+    
+    char *buffer = malloc(100);
+    sprintf(buffer,"Opening Socket on port: %d",portNumber);
+    BCLMark(buffer);
     
     int sockfd;
     socklen_t clilen;
@@ -102,11 +104,6 @@ BCLSocket openSocket(int portNumber, int options){
     return socket;
 }
 
-int doBackGroundTaskWithCallback(void* callbackFunction) {
-    startThread(callbackFunction);
-    return 0;
-}
-
 
 #pragma mark - Support Layer
 I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed){
@@ -118,7 +115,7 @@ I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed){
     leftWheel = getBCLWheelFromSpeed(leftSpeed, kMaxSpeedValue);
     
     char *buffer = malloc(100);
-    snprintf(buffer, sizeof(buffer), "RS:%d - RD:%d : LS:%d - LD:%d\n",rightWheel.speed,rightWheel.direction,leftWheel.speed,leftWheel.direction);
+    snprintf(buffer, sizeof(buffer), "DrivingInfo: RS:%d - RD:%d : LS:%d - LD:%d\n",rightWheel.speed,rightWheel.direction,leftWheel.speed,leftWheel.direction);
     BCLMark(buffer);
     
     data.commandLength = 7;

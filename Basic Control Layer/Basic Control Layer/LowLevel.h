@@ -91,8 +91,11 @@ I2CData I2CTask(I2CCommand command);
 
 
 #pragma mark - Support Functions
+pthread_t startThread(void* func);
+int doBackGroundTaskWithCallback(void* callbackFunction);
 BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed);
 int initRaspberryConnections();
+
 
 #pragma mark - Low Level Support Functions
 unsigned int maxSpeedCheck(unsigned int speed,unsigned int max);

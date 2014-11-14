@@ -28,6 +28,8 @@
 #include "LowLevel.h"
 
 pthread_mutex_t I2CMutex = PTHREAD_MUTEX_INITIALIZER;
+I2CDevice lastDevice;
+
 
 #pragma mark - I2C Manager
 I2CData I2CTask(I2CCommand command) {
@@ -35,7 +37,13 @@ I2CData I2CTask(I2CCommand command) {
     pthread_mutex_lock(&I2CMutex);
     
     // Set 7bit slave for communication with the right device
-    //DT gpioI2cSet7BitSlave(command.device);
+    
+    if (lastDevice.I2C_ID != command.device.I2C_ID) {
+    //DT gpioI2cSet7BitSlave(command.device.I2C_ID);
+    }
+    else {
+        lastDevice.I2C_ID = command.device.I2C_ID;
+    }
     
     // Determine if data must be send or recieved
     if (command.mode == kI2CModeSend) {
@@ -57,6 +65,18 @@ I2CData I2CTask(I2CCommand command) {
 }
 
 #pragma mark - Support Functions
+
+pthread_t startThread(void* func) {
+    pthread_t tid;
+    pthread_create(&tid, NULL, func, NULL);
+    return tid;
+}
+
+int doBackGroundTaskWithCallback(void* callbackFunction) {
+    startThread(callbackFunction);
+    return 0;
+}
+
 BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed) {
     BCLWheel wheel;
     
@@ -120,7 +140,7 @@ void BCLError(char *err) {
 }
 
 void BCLMark(char *mark) {
-    printf(ANSI_COLOR_RED "Mark: %s" ANSI_COLOR_RESET "\n",mark);
+    printf(ANSI_COLOR_YELLOW "Mark: %s" ANSI_COLOR_RESET "\n",mark);
     fflush(stdout);
 }
 

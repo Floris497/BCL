@@ -56,13 +56,13 @@
 int init();
 pthread_t startThread(void* func);
 int stopThread(pthread_t thread);
+int joinThread(pthread_t thread);
 int stopMotors();
 int moveWithSpeed(int leftSpeed,int rightSpeed);
 /*TODO*/ int getDirection();
 /*TODO*/ int getDistanceToWallInDirection(unsigned int direction);
 /*TODO*/ int getDistanceTraveled();
 BCLSocket openSocket(int portNumber,int options);
-int doBackGroundTaskWithCallback(void* callbackFunction);
 
 
 #pragma mark - Support Layer

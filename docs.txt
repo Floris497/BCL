@@ -6,13 +6,15 @@ all commands have the same start of 3 bytes, the structure is shown below:
 
 Common:
   [00-01] sensor/acurator code (always 2 bytes/chars like: "CP" for compas)
-  [02]    (r|a|i) request|awnser|instruction (requests are used to get snesor data, and are awnserd with an awnser)
+  [02]    (r|a|i) request|answer|instruction (requests are used to get snesor data, and are answerd with an answer)
 
-Request: 
-  Does not need more than 3 bytes.
-  If you want the compas data send "CPR" the robot will send an "CPAXXXX" command back when it has collected the data 
-  
-Awnser: numbers are send in human readable chars (send "0600" for 600)
+Request:
+   compass:'CP' [03-03]
+     speed:'SP' [03-03]
+  distance:'DT' [03-06]
+        [03-06] direction to measure "-180" to "+180"
+
+Answer: numbers are send in human readable chars (send "0600" for 600)
    compass:'CP' [03-06]
         [03-06] degrees form north (0 = no compass availible)
      speed:'SP' [03-06]
