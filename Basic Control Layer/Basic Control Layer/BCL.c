@@ -26,7 +26,6 @@
 
 
 #include "BCL.h"
-#include "BCLParse.h"
 
 #pragma mark - Access Layer
 
@@ -34,26 +33,30 @@
 #pragma mark - Module Layer
 
 int init() {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     initRaspberryConnections();
     return 0;
 }
 
 int joinThread(pthread_t thread) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     return pthread_join(thread, NULL);
 }
 
 int stopThread(pthread_t thread) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     stopMotors();
     return pthread_cancel(thread);
 }
 
 int stopMotors() {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     moveWithSpeed(0, 0);
     return 0;
 }
 
 int moveWithSpeed(int leftSpeed,int rightSpeed) {
-    
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     I2CData data;
     data = makeI2CDataFromSpeed(leftSpeed, rightSpeed);
     
@@ -71,7 +74,7 @@ int moveWithSpeed(int leftSpeed,int rightSpeed) {
 }
 
 BCLSocket openSocket(int portNumber, int options){
-    
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     char *buffer = malloc(100);
     sprintf(buffer,"Opening Socket on port: %d",portNumber);
     BCLMark(buffer);
@@ -107,6 +110,7 @@ BCLSocket openSocket(int portNumber, int options){
 
 #pragma mark - Support Layer
 I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed){
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     
     I2CData data;
     BCLWheel rightWheel,leftWheel;
@@ -131,6 +135,7 @@ I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed){
 }
 
 int sendI2CCommand(I2CData data,I2CDevice device) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     I2CCommand command;
     command.data = data;
     command.device = device;
@@ -140,6 +145,7 @@ int sendI2CCommand(I2CData data,I2CDevice device) {
 }
 
 I2CData getI2CData(I2CData data,I2CDevice device) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     I2CCommand command;
     command.data = data;
     command.device = device;

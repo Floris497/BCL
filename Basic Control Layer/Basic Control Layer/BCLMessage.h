@@ -1,8 +1,8 @@
 //
-//  BCLParse.h
+//  BCLMessage.h
 //  Basic Control Layer
 //
-//  Created by Floris Fredrikze on 13/11/14.
+//  Created by Floris Fredrikze on 14/11/14.
 //  Copyright (c) 2014 MiniMind. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,19 +25,16 @@
 
 
 
-#ifndef __Basic_Control_Layer__BCLParse__
-#define __Basic_Control_Layer__BCLParse__
+#ifndef __Basic_Control_Layer__BCLMessage__
+#define __Basic_Control_Layer__BCLMessage__
 
 #include <stdio.h>
-#include "BCLObjects.h"
-#include "BCLConnectionObjects.h"
 #include "BCLFunctions.h"
+#include "BCLConnectionObjects.h"
 
-void *parseObject(BCLSocket sockfd,void *obj);
+int BCLMessageObjectToString(void *messageObject,char *dest);
+int getMessageTypeString(kBCLMessageType type, char *dest);
 
-kBCLMessageType detectMessageType();
-void *getSocketMesg(BCLSocket sockfd, size_t size,char *buffer);
+int intToStringWithSign(char* dest, size_t maxLength, int number);
 
-
-#endif /* defined(__Basic_Control_Layer__BCLParse__) */
-
+#endif /* defined(__Basic_Control_Layer__BCLMessage__) */

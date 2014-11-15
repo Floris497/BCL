@@ -1,5 +1,5 @@
 //
-//  LowLevel.h
+//  BCLFunctions.h
 //  Basic Control Layer
 //
 //  Created by Floris Fredrikze on 18/10/14.
@@ -25,70 +25,14 @@
 
 
 
-#ifndef __Basic_Control_Layer__LowLevel__
-#define __Basic_Control_Layer__LowLevel__
-
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
-#include <pthread.h>
-//#include "rpiGpio.h"
-//#include <wiringPi.h>
-#include <signal.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <poll.h>
-#include <errno.h>
-#include <arpa/inet.h>
+#ifndef __Basic_Control_Layer__BCLFunctions__
+#define __Basic_Control_Layer__BCLFunctions__
 
 #include "colors.h"
-
-#define kMaxSpeedValue 1023
-#define kMotorDualSideCommand 7
-#define kMotorBoardID 0x32
-
-typedef enum kWheelDirection {
-    kWheelDirectionNoDirection,
-    kWheelDirectionForwards,
-    kWheelDirectionBackwards
-} kWheelDirection;
-
-typedef enum kI2CMode {
-    kI2CModeSend,
-    kI2CModeRecieve
-} kI2CMode;
-
-typedef struct BCLWheel {
-    uint16_t speed;
-    kWheelDirection direction;
-} BCLWheel ;
-
-typedef struct I2CDevice {
-    uint8_t  I2C_ID;
-} I2CDevice;
-
-typedef struct I2CData {
-    uint8_t command[10];
-    unsigned int commandLength;
-} I2CData;
-
-typedef struct I2CCommand {
-    I2CDevice device;
-    I2CData data;
-    kI2CMode mode;
-} I2CCommand;
-
-typedef int BCLSocket;
+#include "BCLObjects.h"
 
 #pragma mark - I2C Manager
 I2CData I2CTask(I2CCommand command);
-
 
 #pragma mark - Support Functions
 pthread_t startThread(void* func);
@@ -101,13 +45,15 @@ int initRaspberryConnections();
 unsigned int maxSpeedCheck(unsigned int speed,unsigned int max);
 uint8_t getHigh8bits(uint16_t number);
 uint8_t getLow8bits(uint16_t number);
+
 void BCLLog(char *log);
 void BCLError(char *err);
 void BCLMark(char *mark);
+void BCLMarkFunc(const char *funcNameFull,const char *funcName);
 char* substring(const char* str, size_t begin, size_t len);
 
 
-#endif /* defined(__Basic_Control_Layer__LowLevel__) */
+#endif /* defined(__Basic_Control_Layer__BCLFunctions__) */
 
 
 

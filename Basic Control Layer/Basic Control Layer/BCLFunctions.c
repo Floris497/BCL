@@ -1,5 +1,5 @@
 //
-//  LowLevel.c
+//  BCLFunctions.c
 //  Basic Control Layer
 //
 //  Created by Floris Fredrikze on 18/10/14.
@@ -25,7 +25,7 @@
 
 
 
-#include "LowLevel.h"
+#include "BCLFunctions.h"
 
 pthread_mutex_t I2CMutex = PTHREAD_MUTEX_INITIALIZER;
 I2CDevice lastDevice;
@@ -33,9 +33,10 @@ I2CDevice lastDevice;
 
 #pragma mark - I2C Manager
 I2CData I2CTask(I2CCommand command) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     // Lock function so I2C is not used twise at a time
+    BCLMark("I2C Task Executed");
     pthread_mutex_lock(&I2CMutex);
-    
     // Set 7bit slave for communication with the right device
     
     if (lastDevice.I2C_ID != command.device.I2C_ID) {
@@ -59,7 +60,8 @@ I2CData I2CTask(I2CCommand command) {
     }
     // It is now safe to unlock the function
     pthread_mutex_unlock(&I2CMutex);
-    
+    BCLMark("I2C Task Done");
+
     // Return I2CData
     return command.data;
 }
@@ -67,17 +69,20 @@ I2CData I2CTask(I2CCommand command) {
 #pragma mark - Support Functions
 
 pthread_t startThread(void* func) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     pthread_t tid;
     pthread_create(&tid, NULL, func, NULL);
     return tid;
 }
 
 int doBackGroundTaskWithCallback(void* callbackFunction) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     startThread(callbackFunction);
     return 0;
 }
 
 BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     BCLWheel wheel;
     
     if (speed < 0) {
@@ -96,6 +101,7 @@ BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed) {
 }
 
 int initRaspberryConnections() {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
 //    uint8_t totalPower[2] = {4,255}; // command to set glabal power to 255 (4: command to set glabal power)
 //    uint8_t softStart[3] = {0x91,23,0}; // command to turn off "DC softstart"? (EEPROM addres 23 to 0) (0x91: command to change EEPROM)
     
@@ -118,14 +124,17 @@ int initRaspberryConnections() {
 
 #pragma mark - Low Level Support Functions
 unsigned int maxSpeedCheck(unsigned int speed,unsigned int max) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     return (speed > max) ? max : speed;
 }
 
 uint8_t getHigh8bits(uint16_t number) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     return number >> 8;
 }
 
 uint8_t getLow8bits(uint16_t number) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     return number &  0xFF;
 }
 
@@ -144,13 +153,19 @@ void BCLMark(char *mark) {
     fflush(stdout);
 }
 
-
+void BCLMarkFunc(const char *funcNameFull,const char *funcName) {
+    printf(ANSI_COLOR_CYAN "Func: %s" ANSI_COLOR_RESET "\n",funcName);
+    fflush(stdout);
+}
 
 char* substring(const char* str, size_t begin, size_t len) {
+    BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     if (str == 0 || strlen(str) == 0 || strlen(str) < begin || strlen(str) < (begin+len))
         return 0;
+    puts(strndup(str + begin, len));
     return strndup(str + begin, len);
 }
+
 
 
 
