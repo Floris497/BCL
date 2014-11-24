@@ -10,6 +10,6 @@
 
 int getNextObjectSocket(BCLSocket sockfd,void *obj) {
     BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
-    parseObject(sockfd, obj);
+    parseObject(sockfd);
     return 0;
 }

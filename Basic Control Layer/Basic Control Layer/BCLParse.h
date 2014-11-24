@@ -33,10 +33,10 @@
 #include "BCLConnectionObjects.h"
 #include "BCLFunctions.h"
 
-void *parseObject(BCLSocket sockfd,void *obj);
+void *parseObject(BCLSocket sockfd);
 
 kBCLMessageType detectMessageType();
-void *getSocketMesg(BCLSocket sockfd, size_t size,char *buffer);
+void *getSocketMesg(BCLSocket sockfd, size_t size);
 
 
 #endif /* defined(__Basic_Control_Layer__BCLParse__) */

@@ -40,7 +40,7 @@ I2CData I2CTask(I2CCommand command) {
     // Set 7bit slave for communication with the right device
     
     if (lastDevice.I2C_ID != command.device.I2C_ID) {
-    //DT gpioI2cSet7BitSlave(command.device.I2C_ID);
+        gpioI2cSet7BitSlave(command.device.I2C_ID);
     }
     else {
         lastDevice.I2C_ID = command.device.I2C_ID;
@@ -48,12 +48,12 @@ I2CData I2CTask(I2CCommand command) {
     
     // Determine if data must be send or recieved
     if (command.mode == kI2CModeSend) {
-        // Send data to device
-        //DT gpioI2cWriteData(command.data.command,command.data.commandLength);
+        //Send data to device
+        gpioI2cWriteData(command.data.command,command.data.commandLength);
     }
     else if (command.mode == kI2CModeRecieve) {
         // Read from device
-        //DT gpioI2cReadData(&command.data.command,command.data.commandLength);
+        gpioI2cReadData(command.data.command,command.data.commandLength);
     }
     else {
         BCLError("wrong mode specified");
@@ -95,28 +95,33 @@ BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed) {
     }
     
     // int abs(int i) Makes/Leaves i positive
-    wheel.speed = maxSpeedCheck((uint8_t)abs(speed), maxSpeed);
+    wheel.speed = maxSpeedCheck((unsigned int)abs(speed), maxSpeed);
     
     return wheel;
 }
 
 int initRaspberryConnections() {
     BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
-//    uint8_t totalPower[2] = {4,255}; // command to set glabal power to 255 (4: command to set glabal power)
-//    uint8_t softStart[3] = {0x91,23,0}; // command to turn off "DC softstart"? (EEPROM addres 23 to 0) (0x91: command to change EEPROM)
+    uint8_t totalPower[2] = {4,255}; // command to set glabal power to 255 (4: command to set glabal power)
+    uint8_t softStart[3] = {0x91,23,0}; // command to turn off "DC softstart"? (EEPROM addres 23 to 0) (0x91: command to change EEPROM)
     
     BCLMark("Init Connections Started");
 
-//    if (gpioSetup()!= OK)
-//        BCLError("gpio setup Failed");
-//    if (gpioI2cSetup() != OK)
-//        BCLError("I2C setup Failed");
-//    if (gpioI2cSet7BitSlave(0x32) != OK)
-//        BCLError("gpioI2cSet7BitSlave failed");
-//    if (gpioI2cWriteData(&totalPower[0], 2) != OK)
-//        BCLError("gpioI2cWriteData failed");
-//    if (gpioI2cWriteData(&softStart[0],3) != OK);
-//        BCLError("gpioI2cWriteData failed");
+    if (gpioSetup()!= OK) {
+        BCLError("gpio setup Failed");
+    }
+    if (gpioI2cSetup() != OK) {
+        BCLError("I2C setup Failed");
+    }
+    if (gpioI2cSet7BitSlave(0x32) != OK) {
+        BCLError("gpioI2cSet7BitSlave failed");
+    }
+    if (gpioI2cWriteData(&totalPower[0], 2) != OK) {
+        BCLError("gpioI2cWriteData failed");
+    }
+    if (gpioI2cWriteData(&softStart[0],3) != OK) {
+        BCLError("gpioI2cWriteData failed");
+    }
     
     BCLMark("Init Connections Ended");
     return 0;
@@ -162,7 +167,6 @@ char* substring(const char* str, size_t begin, size_t len) {
     BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     if (str == 0 || strlen(str) == 0 || strlen(str) < begin || strlen(str) < (begin+len))
         return 0;
-    puts(strndup(str + begin, len));
     return strndup(str + begin, len);
 }
 

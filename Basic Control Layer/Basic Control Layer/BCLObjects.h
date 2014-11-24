@@ -18,8 +18,8 @@
 #include <math.h>
 #include <pthread.h>
 #include <errno.h>
-//#include "rpiGpio.h"
-//#include <wiringPi.h>
+#include "rpiGpio.h"
+#include <wiringPi.h>
 
 #define kMaxSpeedValue 1023
 #define kMotorDualSideCommand 7
@@ -27,8 +27,8 @@
 
 typedef enum kWheelDirection {
     kWheelDirectionNoDirection,
-    kWheelDirectionForwards,
-    kWheelDirectionBackwards
+    kWheelDirectionBackwards,
+    kWheelDirectionForwards
 } kWheelDirection;
 
 typedef enum kI2CMode {
@@ -46,7 +46,7 @@ typedef struct I2CDevice {
 } I2CDevice;
 
 typedef struct I2CData {
-    uint8_t command[10];
+    uint8_t *command;
     unsigned int commandLength;
 } I2CData;
 

@@ -32,8 +32,8 @@
 #include "BCLFunctions.h"
 #include "BCLConnectionObjects.h"
 
-int BCLMessageObjectToString(void *messageObject,char *dest);
-int getMessageTypeString(kBCLMessageType type, char *dest);
+char* BCLMessageObjectToString(void *messageObject);
+char* getMessageTypeString(kBCLMessageType type);
 
 int intToStringWithSign(char* dest, size_t maxLength, int number);
 

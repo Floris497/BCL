@@ -27,101 +27,115 @@
 
 #include "BCLParse.h"
 
-void *parseObject(BCLSocket sockfd,void *obj) {
+void *parseObject(BCLSocket sockfd) {
     //BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     
     char *peek = malloc(4);
     bzero(peek, 4);
-    recv(sockfd, peek, 3,MSG_PEEK);
-    BCLMark(peek);
-    int type = detectMessageType(peek);
-    
-    
-    if (type == kBCLMessageType_Unknown) {
-        free(obj);
+    if (recv(sockfd, peek, 3,MSG_PEEK) <= 0) {
+        BCLMark("Socked Disconnected");
         return NULL;
     }
     
+    BCLMark(peek);
+    int type = detectMessageType(peek);
     
-#pragma section Requests
+    if (type == kBCLMessageType_Unknown) {
+        BCLMessageObjDiscover *object = malloc(sizeof(BCLMessageObjDiscover));
+        object->messageType = type;
+        return object;
+    }
+    
+    
+#pragma mark Requests
     
     else if (type == kBCLMessageType_Request_CP) {
         char *unused = malloc(4);
-        recv(sockfd, unused, 3, 0);
-        obj = realloc(obj,sizeof(BCLMessageObjReqCP));
-        BCLMessageObjReqCP *object = obj;
+        if (recv(sockfd, unused, 3, 0) <= 0) {
+            BCLMark("Socked Disconnected");
+            return NULL;
+        }
+        BCLMessageObjReqCP *object = malloc(sizeof(BCLMessageObjReqCP));
         object->messageType = kBCLMessageType_Request_CP;
+        return object;
     }
     
     else if (type == kBCLMessageType_Request_SP) {
         char *unused = malloc(4);
-        recv(sockfd, unused, 3, 0);
-        obj = realloc(obj,sizeof(BCLMessageObjReqSP));
-        BCLMessageObjReqSP *object = obj;
+        if (recv(sockfd, unused, 3, 0) <= 0) {
+            BCLMark("Socked Disconnected");
+            return NULL;
+        };
+        BCLMessageObjReqSP *object = malloc(sizeof(BCLMessageObjReqSP));
         object->messageType = kBCLMessageType_Request_SP;
+        return object;
     }
     
     else if (type == kBCLMessageType_Request_DT) {
-        obj = realloc(obj,sizeof(BCLMessageObjReqDT));
-        char *buff; buff = getSocketMesg(sockfd, kBCLMessageLengthRequest_DT, buff);
-        BCLMessageObjReqDT *object = obj;
+        BCLMessageObjReqDT *object = malloc(sizeof(BCLMessageObjReqDT));
+        char *buff = getSocketMesg(sockfd, kBCLMessageLengthRequest_DT);
         object->messageType = kBCLMessageType_Request_DT;
         object->direction = atoi(substring(buff, 3, 4));
         free(buff);
+        return object;
     }
 
-#pragma section Answers
+#pragma mark Answers
 
     else if (type == kBCLMessageType_Answer_CP) {
-        obj = realloc(obj,sizeof(BCLMessageObjAnsCP));
-        char *buff; buff = getSocketMesg(sockfd, kBCLMessageLengthAnswer_CP, buff);
-        BCLMessageObjAnsCP *object = obj;
+        BCLMessageObjAnsCP *object = malloc(sizeof(BCLMessageObjAnsCP));
+        char *buff = getSocketMesg(sockfd, kBCLMessageLengthAnswer_CP);
         object->messageType = kBCLMessageType_Answer_CP;
         object->degrees = atoi(substring(buff, 3, 4));
         free(buff);
+        return object;
     }
     
     else if (type == kBCLMessageType_Answer_SP) {
-        obj = realloc(obj,sizeof(BCLMessageObjAnsSP));
-        char *buff; buff = getSocketMesg(sockfd, kBCLMessageLengthAnswer_SP, buff);
-         BCLMessageObjAnsSP *object = obj;
+        BCLMessageObjAnsSP *object = malloc(sizeof(BCLMessageObjAnsSP));
+        char *buff = getSocketMesg(sockfd, kBCLMessageLengthAnswer_SP);
         object->messageType = kBCLMessageType_Answer_SP;
         object->speed = atoi(substring(buff, 3, 4));
         free(buff);
+        return object;
     }
     
     else if (type == kBCLMessageType_Answer_DT) {
-        obj = realloc(obj,sizeof(BCLMessageObjAnsDT));
-        char *buff; buff = getSocketMesg(sockfd, kBCLMessageLengthAnswer_DT, buff);
-        BCLMessageObjAnsDT *object = obj;
+        BCLMessageObjAnsDT *object = malloc(sizeof(BCLMessageObjAnsDT));
+        char *buff = getSocketMesg(sockfd, kBCLMessageLengthAnswer_DT);
         object->messageType = kBCLMessageType_Request_CP;
         object->distance = atoi(substring(buff, 3, 4));
         object->direction = atoi(substring(buff, 7, 4));
         free(buff);
+        return object;
     }
     
-#pragma section Instructions
+#pragma mark Instructions
 
     else if (type == kBCLMessageType_Instruction_DR) {
-        obj = realloc(obj,sizeof(BCLMessageObjInsDR));
-        char *buff; buff = getSocketMesg(sockfd, kBCLMessageLengthInstruction_DR, buff);
-        BCLMessageObjInsDR *object = obj;
+        BCLMessageObjInsDR *object = malloc(sizeof(BCLMessageObjInsDR));
+        char *buff = getSocketMesg(sockfd, kBCLMessageLengthInstruction_DR);
         object->messageType = kBCLMessageType_Instruction_DR;
         object->leftSpeed = atoi(substring(buff, 3, 5));
         object->rightSpeed = atoi(substring(buff, 8, 5));
         free(buff);
+        return object;
     }
     
     else if (type == kBCLMessageType_Instruction_ST) {
         char *unused = malloc(4);
-        recv(sockfd, unused, 3, 0);
-        obj = realloc(obj,sizeof(BCLMessageObjInsST));
-        BCLMessageObjInsST *object = obj;
+        if (recv(sockfd, unused, 3, 0) <= 0) {
+            BCLMark("Socked Disconnected");
+            return NULL;
+        };
+        BCLMessageObjInsST *object = malloc(sizeof(BCLMessageObjInsST));
         object->messageType = kBCLMessageType_Instruction_ST;
+        free(unused);
+        return object;
     }
     
     
-    return obj;
+    return NULL;
 };
 
 kBCLMessageType detectMessageType(char *peek) {
@@ -149,10 +163,13 @@ kBCLMessageType detectMessageType(char *peek) {
     return kind;
 }
 
-void *getSocketMesg(BCLSocket sockfd, size_t size,char *buffer) {
-    buffer = malloc(size + kNullCharLengt);
+void *getSocketMesg(BCLSocket sockfd, size_t size) {
+    char *buffer = malloc(size + kNullCharLengt);
     bzero(buffer, size + kNullCharLengt);
-    recv(sockfd, buffer, size, 0);
+    if (recv(sockfd, buffer, size, 0) <= 0) {
+        BCLMark("Socked Disconnected");
+        return NULL;
+    }
     return buffer;
 }
 

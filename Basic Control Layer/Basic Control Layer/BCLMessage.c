@@ -27,95 +27,93 @@
 
 #include "BCLMessage.h"
 
-int BCLMessageObjectToString(void *messageObject,char *dest) {
+char* BCLMessageObjectToString(void *messageObject) {
     BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     int type = ((struct BCLMessageObjDiscover*)messageObject)->messageType;
     
-#pragma section Requests
+#pragma mark Requests
     
     if (type == kBCLMessageType_Unknown) {
         BCLError("Unknown Message Type");
-        return 1;
+        return NULL;
     }
     else if (type == kBCLMessageType_Request_CP) {
-        dest = realloc(dest,kBCLMessageLengthRequest_CP + kNullCharLengt);
-        getMessageTypeString(type, dest);
+        return getMessageTypeString(type);
     }
     else if (type == kBCLMessageType_Request_SP) {
-        dest = realloc(dest,kBCLMessageLengthRequest_SP + kNullCharLengt);
-        getMessageTypeString(type, dest);
+        return getMessageTypeString(type);
     }
     else if (type == kBCLMessageType_Request_DT) {
-        dest = realloc(dest,kBCLMessageLengthRequest_DT + kNullCharLengt);
-        char *messageTypeStr = realloc(dest,kBCLMessageLengthVarType + kNullCharLengt);
-        getMessageTypeString(type, messageTypeStr);
+        char *dest = malloc(kBCLMessageLengthRequest_DT + kNullCharLengt);
         BCLMessageObjReqDT *object = messageObject;
-        char *directionStr = realloc(dest,kBCLMessageLengthVarDegrees + kNullCharLengt);
+        char *messageTypeStr = getMessageTypeString(type);
+        char *directionStr = malloc(kBCLMessageLengthVarDegrees + kNullCharLengt);
         intToStringWithSign(directionStr, kBCLMessageLengthVarDegrees, object->direction);
         sprintf(dest,"%s%s",messageTypeStr,directionStr);
+        return dest;
     }
     
-#pragma section Answers
+#pragma mark Answers
     
     else if (type == kBCLMessageType_Answer_CP) {
-        dest = realloc(dest,kBCLMessageLengthAnswer_CP + kNullCharLengt);
-        char *messageTypeStr = realloc(dest,kBCLMessageLengthVarType + kNullCharLengt);
-        getMessageTypeString(type, messageTypeStr);
+        char *dest = malloc(kBCLMessageLengthAnswer_CP + kNullCharLengt);
+        char *messageTypeStr = getMessageTypeString(type);
         BCLMessageObjAnsCP *object = messageObject;
-        char *degreesStr = realloc(dest,kBCLMessageLengthVarDegrees + kNullCharLengt);
+        char *degreesStr = malloc(kBCLMessageLengthVarDegrees + kNullCharLengt);
         intToStringWithSign(degreesStr, kBCLMessageLengthVarDegrees, object->degrees);
         sprintf(dest,"%s%s",messageTypeStr,degreesStr);
+        return dest;
     }
     else if (type == kBCLMessageType_Answer_SP) {
-        dest = realloc(dest,kBCLMessageLengthAnswer_SP + kNullCharLengt);
-        char *messageTypeStr = realloc(dest,kBCLMessageLengthVarType + kNullCharLengt);
-        getMessageTypeString(type, messageTypeStr);
+        char *dest = malloc(kBCLMessageLengthAnswer_SP + kNullCharLengt);
+        char *messageTypeStr = getMessageTypeString(type);
         BCLMessageObjAnsSP *object = messageObject;
         char *speedStr = realloc(dest,kBCLMessageLengthVarSpeed + kNullCharLengt);
         intToStringWithSign(speedStr, kBCLMessageLengthVarSpeed, object->speed);
         sprintf(dest,"%s%s",messageTypeStr,speedStr);
+        return dest;
     }
     else if (type == kBCLMessageType_Answer_DT) {
-        dest = realloc(dest,kBCLMessageLengthAnswer_DT + kNullCharLengt);
-        char *messageTypeStr = realloc(dest,kBCLMessageLengthVarType + kNullCharLengt);
-        getMessageTypeString(type, messageTypeStr);
+        char *dest = malloc(kBCLMessageLengthAnswer_DT + kNullCharLengt);
+        char *messageTypeStr = getMessageTypeString(type);
         BCLMessageObjAnsDT *object = messageObject;
-        char *directionStr = realloc(dest,kBCLMessageLengthVarSpeed + kNullCharLengt);
+        char *directionStr = malloc(kBCLMessageLengthVarSpeed + kNullCharLengt);
         intToStringWithSign(directionStr, kBCLMessageLengthVarSpeed, object->direction);
-        char *distanceStr = realloc(dest,kBCLMessageLengthVarDistance + kNullCharLengt);
+        char *distanceStr = malloc(kBCLMessageLengthVarDistance + kNullCharLengt);
         intToStringWithSign(distanceStr, kBCLMessageLengthVarDistance, object->distance);
         sprintf(dest,"%s%s%s",messageTypeStr,directionStr,directionStr);
+        return dest;
     }
     
-#pragma section Instructions
+#pragma mark Instructions
     
     else if (type == kBCLMessageType_Instruction_DR) {
-        dest = realloc(dest,kBCLMessageLengthInstruction_DR + kNullCharLengt);
-        char *messageTypeStr = realloc(dest,kBCLMessageLengthVarType + kNullCharLengt);
-        getMessageTypeString(type, messageTypeStr);
+        char *dest = malloc(kBCLMessageLengthInstruction_DR + kNullCharLengt);
+        char *messageTypeStr = getMessageTypeString(type);
         BCLMessageObjInsDR *object = messageObject;
-        char *lSpeedStr = realloc(dest,kBCLMessageLengthVarSpeed + kNullCharLengt);
+        char *lSpeedStr = malloc(kBCLMessageLengthVarSpeed + kNullCharLengt);
         intToStringWithSign(lSpeedStr, kBCLMessageLengthVarSpeed, object->leftSpeed);
-        char *rSpeedStr = realloc(dest,kBCLMessageLengthVarSpeed + kNullCharLengt);
+        char *rSpeedStr = malloc(kBCLMessageLengthVarSpeed + kNullCharLengt);
         intToStringWithSign(rSpeedStr, kBCLMessageLengthVarSpeed, object->rightSpeed);
         sprintf(dest,"%s%s%s",messageTypeStr,lSpeedStr,rSpeedStr);
+        return dest;
     }
     else if (type == kBCLMessageType_Instruction_ST) {
-        dest = realloc(dest,kBCLMessageLengthInstruction_ST + kNullCharLengt);
-        getMessageTypeString(type, dest);
+        return getMessageTypeString(type);
     }
     else {
         BCLError("Wrong Message Type");
-        return 1;
+        return NULL;
     }
     
-    return 0;
+    return NULL;
 };
 
-int getMessageTypeString(kBCLMessageType type, char *dest) {
+char* getMessageTypeString(kBCLMessageType type) {
+    char *dest = malloc(kBCLMessageLengthVarType + kNullCharLengt);
     BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     if (type == kBCLMessageType_Unknown) {
-        return 1;
+        return NULL;
     } else if (type == kBCLMessageType_Request_CP) {
         dest = "CPR";
     } else if (type == kBCLMessageType_Request_SP) {
@@ -133,10 +131,10 @@ int getMessageTypeString(kBCLMessageType type, char *dest) {
     } else if (type == kBCLMessageType_Instruction_ST) {
         dest = "STI";
     } else {
-        return 1;
+        return NULL;
     }
     
-    return 0;
+    return NULL;
 }
 
 int intToStringWithSign(char* dest, size_t maxLength, int number) {

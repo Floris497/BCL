@@ -118,10 +118,13 @@ I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed){
     rightWheel = getBCLWheelFromSpeed(rightSpeed, kMaxSpeedValue);
     leftWheel = getBCLWheelFromSpeed(leftSpeed, kMaxSpeedValue);
     
-    char *buffer = malloc(100);
-    snprintf(buffer, sizeof(buffer), "DrivingInfo: RS:%d - RD:%d : LS:%d - LD:%d\n",rightWheel.speed,rightWheel.direction,leftWheel.speed,leftWheel.direction);
-    BCLMark(buffer);
+    //char *buffer = malloc(100);
+    //snprintf(buffer, sizeof(buffer), "DrivingInfo: RS:%d - RD:%d : LS:%d - LD:%d\n",rightWheel.speed,rightWheel.direction,leftWheel.speed,leftWheel.direction);
+    //BCLMark(buffer);
     
+    BCLMark("This working?");
+    data.command = malloc(7);
+    bzero(data.command, 7);
     data.commandLength = 7;
     data.command[0] = kMotorDualSideCommand;
     data.command[1] = getHigh8bits(rightWheel.speed);
