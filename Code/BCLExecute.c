@@ -8,8 +8,7 @@
 
 #include "BCLExecute.h"
 
-int getNextObjectSocket(BCLSocket sockfd,void *obj) {
+void* getNextObjectSocket(BCLSocket sockfd) {
     BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
-    parseObject(sockfd);
-    return 0;
+    return parseObject(sockfd);
 }

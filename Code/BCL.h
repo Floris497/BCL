@@ -32,26 +32,6 @@
 #include "BCLObjects.h"
 #include "BCLExecute.h"
 
-#pragma mark - Script Layer
-/*TODO*/ int turnLeftDegrees(int degrees);
-/*TODO*/ int turnRightDegrees(int degrees);
-/*TODO*/ int stopCarInTime(int Seconds);
-/*TODO*/ int moveForwardWithSpeedForTime(int speed,int seconds);
-/*TODO*/ int movebackwardsWithSpeedForTime(int speed,int seconds);
-/*TODO*/ int moveForwardWithSpeedForDistance(int speed,int meters);
-/*TODO*/ int movebackwardsWithSpeedForDistance(int speed,int meters);
-/*TODO*/ int getDistanceToWall();
-/*TODO*/ int stopCar();
-
-#pragma mark - Access Layer
-/*TODO*/ int moveForwardWithSpeed(int speed); //1 to 100
-/*TODO*/ int moveBackwardWithSpeed(int speed); //1 to 100
-/*TODO*/ int moveLeftWithSpeedAndIntensity(int speed,unsigned int intensity); // both 1 to 100
-/*TODO*/ int moveRightWithSpeedAndIntensity(int speed,unsigned int intensity); // both 1 to 100
-/*TODO*/ int turnLeft();
-/*TODO*/ int turnRight();
-/*TODO*/ int getDistanceInDirection(int direction);
-
 #pragma mark - Module Layer
 int init();
 pthread_t startThread(void* func);
@@ -60,22 +40,20 @@ int joinThread(pthread_t thread);
 int stopMotors();
 int moveWithSpeed(int leftSpeed,int rightSpeed);
 /*TODO*/ int getDirection();
-/*TODO*/ int getDistanceToWallInDirection(unsigned int direction);
-/*TODO*/ int getDistanceTraveled();
+int getDistanceToObject();
+double getDistanceTraveled(int wheelCounter);
+int getCompassValue();
 BCLSocket openSocket(int portNumber,int options);
 
 
 #pragma mark - Support Layer
 I2CData makeI2CDataFromSpeed(int leftSpeed,int rightSpeed);
-int sendI2CCommand(I2CData data,I2CDevice device);
-I2CData getI2CData(I2CData data,I2CDevice device);
+int sendI2CCommand(I2CData data,uint8_t device);
+I2CData getI2CData(unsigned int length,uint8_t device);
 
 int getWheelCounter();
 int resetWheelCounter();
 
-
 #endif
-
-
 
 

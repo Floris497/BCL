@@ -70,6 +70,7 @@ typedef enum kBCLMessageType {
     kBCLMessageType_Answer_CP,
     kBCLMessageType_Answer_SP,
     kBCLMessageType_Answer_DT,
+    kBCLMessageType_Answer_LP,
     
     kBCLMessageType_Instruction_DR,
     kBCLMessageType_Instruction_ST
@@ -112,6 +113,15 @@ typedef struct  BCLMessageObjAnsDT {
     int distance;
     int direction;
 }  BCLMessageObjAnsDT;
+
+typedef struct  BCLMessageObjAnsLP {
+    kBCLMessageType messageType;
+    int fineAmount;
+    char *plate;
+    char *name;
+    char *offence;
+    char *date;
+}  BCLMessageObjAnsLP;
 
 
 #pragma mark - messageType: Instructions

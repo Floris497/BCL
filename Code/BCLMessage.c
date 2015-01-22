@@ -34,7 +34,7 @@ char* BCLMessageObjectToString(void *messageObject) {
 #pragma mark Requests
     
     if (type == kBCLMessageType_Unknown) {
-        BCLError("Unknown Message Type");
+        BCLLog("Unknown Message Type",kLogError);
         return NULL;
     }
     else if (type == kBCLMessageType_Request_CP) {
@@ -68,7 +68,7 @@ char* BCLMessageObjectToString(void *messageObject) {
         char *dest = malloc(kBCLMessageLengthAnswer_SP + kNullCharLengt);
         char *messageTypeStr = getMessageTypeString(type);
         BCLMessageObjAnsSP *object = messageObject;
-        char *speedStr = realloc(dest,kBCLMessageLengthVarSpeed + kNullCharLengt);
+        char *speedStr = malloc(kBCLMessageLengthVarSpeed + kNullCharLengt);
         intToStringWithSign(speedStr, kBCLMessageLengthVarSpeed, object->speed);
         sprintf(dest,"%s%s",messageTypeStr,speedStr);
         return dest;
@@ -102,7 +102,7 @@ char* BCLMessageObjectToString(void *messageObject) {
         return getMessageTypeString(type);
     }
     else {
-        BCLError("Wrong Message Type");
+        BCLLog("Wrong Message Type",kLogError);
         return NULL;
     }
     
@@ -126,6 +126,8 @@ char* getMessageTypeString(kBCLMessageType type) {
         dest = "SPA";
     } else if (type == kBCLMessageType_Answer_DT) {
         dest = "DTA";
+    } else if (type == kBCLMessageType_Answer_DT) {
+        dest = "LPA";
     } else if (type == kBCLMessageType_Instruction_DR) {
         dest = "DRI";
     } else if (type == kBCLMessageType_Instruction_ST) {
@@ -134,7 +136,7 @@ char* getMessageTypeString(kBCLMessageType type) {
         return NULL;
     }
     
-    return NULL;
+    return dest;
 }
 
 int intToStringWithSign(char* dest, size_t maxLength, int number) {
@@ -148,3 +150,6 @@ int intToStringWithSign(char* dest, size_t maxLength, int number) {
     dest = substring(dest, 0, maxLength);
     return 0;
 }
+
+
+

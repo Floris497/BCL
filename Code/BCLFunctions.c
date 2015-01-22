@@ -23,44 +23,56 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-
-
 #include "BCLFunctions.h"
 
 pthread_mutex_t I2CMutex = PTHREAD_MUTEX_INITIALIZER;
-I2CDevice lastDevice;
+uint8_t lastDevice;
 
 
 #pragma mark - I2C Manager
 I2CData I2CTask(I2CCommand command) {
     BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
     // Lock function so I2C is not used twise at a time
-    BCLMark("I2C Task Executed");
+    BCLLog("I2C Task Executed",kLogMark);
     pthread_mutex_lock(&I2CMutex);
     // Set 7bit slave for communication with the right device
+ 
+#ifdef __LP64__
+    //64-bit Intel or PPC
+#else
+
+    if (gpioI2cSet7BitSlave(command.device) != OK) {
+        BCLLog("gpioI2cSet7BitSlave failed",kLogError);
+    }
     
-    if (lastDevice.I2C_ID != command.device.I2C_ID) {
-        gpioI2cSet7BitSlave(command.device.I2C_ID);
+    /*if (lastDevice != command.device) {
+        gpioI2cSet7BitSlave(command.device);
     }
     else {
-        lastDevice.I2C_ID = command.device.I2C_ID;
-    }
+        lastDevice = command.device;
+    }*/
     
     // Determine if data must be send or recieved
     if (command.mode == kI2CModeSend) {
         //Send data to device
-        gpioI2cWriteData(command.data.command,command.data.commandLength);
+        if (gpioI2cWriteData(command.data.command,command.data.commandLength) != OK) {
+            BCLLog("gpioI2cWriteData failed",kLogError);
+        }
     }
+
     else if (command.mode == kI2CModeRecieve) {
         // Read from device
-        gpioI2cReadData(command.data.command,command.data.commandLength);
+        if (gpioI2cReadData(command.data.command,command.data.commandLength) != OK) {
+            BCLLog("gpioI2cReadData failed",kLogError);
+        }
     }
     else {
-        BCLError("wrong mode specified");
+        BCLLog("wrong mode specified",kLogError);
     }
+#endif
     // It is now safe to unlock the function
     pthread_mutex_unlock(&I2CMutex);
-    BCLMark("I2C Task Done");
+    BCLLog("I2C Task Done",kLogMark);
 
     // Return I2CData
     return command.data;
@@ -77,6 +89,7 @@ pthread_t startThread(void* func) {
 
 int doBackGroundTaskWithCallback(void* callbackFunction) {
     BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
+    
     startThread(callbackFunction);
     return 0;
 }
@@ -102,28 +115,54 @@ BCLWheel getBCLWheelFromSpeed(int speed,int maxSpeed) {
 
 int initRaspberryConnections() {
     BCLMarkFunc(__PRETTY_FUNCTION__,__FUNCTION__);
+    
+    BCLLog("Init Connections Started",kLogMark);
+
+#ifdef __LP64__
+    //64-bit Intel or PPC
+#else
     uint8_t totalPower[2] = {4,255}; // command to set glabal power to 255 (4: command to set glabal power)
     uint8_t softStart[3] = {0x91,23,0}; // command to turn off "DC softstart"? (EEPROM addres 23 to 0) (0x91: command to change EEPROM)
-    
-    BCLMark("Init Connections Started");
+
+    uint8_t CRA[2]        =   {kCompassConfigRegA, 0x70};
+    uint8_t CRB[2]        =   {kCompassConfigRegB, 0xC0};
+    uint8_t ContMode[2]   =   {kCompassModeReg, 0x00};
 
     if (gpioSetup()!= OK) {
-        BCLError("gpio setup Failed");
+        BCLLog("gpio setup Failed",kLogFatalError);
     }
     if (gpioI2cSetup() != OK) {
-        BCLError("I2C setup Failed");
+        BCLLog("I2C setup Failed",kLogFatalError);
     }
-    if (gpioI2cSet7BitSlave(0x32) != OK) {
-        BCLError("gpioI2cSet7BitSlave failed");
+    if (gpioI2cSet7BitSlave(kMotorBoardID) != OK) {
+        BCLLog("gpioI2cSet7BitSlave failed",kLogError);
     }
     if (gpioI2cWriteData(&totalPower[0], 2) != OK) {
-        BCLError("gpioI2cWriteData failed");
+        BCLLog("gpioI2cWriteData failed",kLogError);
     }
     if (gpioI2cWriteData(&softStart[0],3) != OK) {
-        BCLError("gpioI2cWriteData failed");
+        BCLLog("gpioI2cWriteData failed",kLogError);
     }
-    
-    BCLMark("Init Connections Ended");
+
+    if (gpioI2cSet7BitSlave(kCompassID) != OK){
+        BCLLog("gpioI2cSet7BitSlave failed",kLogError);
+    }
+    if (gpioI2cWriteData(CRA, 2) != OK){
+        BCLLog("gpioI2cWriteData failed",kLogError);
+    }
+
+    if (gpioI2cWriteData(CRB, 2) != OK){
+        BCLLog("gpioI2cWriteData failed",kLogError);
+    }
+
+    if (gpioI2cWriteData(ContMode, 2) != OK){
+        BCLLog("gpioI2cWriteData failed",kLogError);
+    }
+
+
+#endif
+
+    BCLLog("Init Connections Ended",kLogMark);
     return 0;
 }
 
@@ -143,23 +182,41 @@ uint8_t getLow8bits(uint16_t number) {
     return number &  0xFF;
 }
 
-void BCLLog(char* log){
-    printf("Log: %s\n",log);
-    fflush(stdout);
-}
-
-void BCLError(char *err) {
-    printf(ANSI_COLOR_RED "Error: %s" ANSI_COLOR_RESET "\n",err);
-    fflush(stdout);
-}
-
-void BCLMark(char *mark) {
-    printf(ANSI_COLOR_YELLOW "Mark: %s" ANSI_COLOR_RESET "\n",mark);
-    fflush(stdout);
+void BCLLog(char* log, kLogType logType){
+    
+    if(logType == kLogError) {
+        fprintf(stderr,ANSI_COLOR_RED"Error: %s"ANSI_COLOR_RESET"\n",log);
+        fflush(stderr);
+    }
+    else if(logType == kLogFatalError) {
+        fprintf(stderr,ANSI_COLOR_RED"Error: %s"ANSI_COLOR_RESET"\n",log);
+        fflush(stderr);
+        BCLLog("Terminating due to error",kLogMark);
+        exit(1);
+    }
+    else if(logType == kLogWarning) {
+        fprintf(stderr,ANSI_COLOR_YELLOW"Warning: %s"ANSI_COLOR_RESET"\n",log);
+        fflush(stderr);
+    }
+    else if(logType == kLogInfo) {
+        printf(ANSI_COLOR_GREEN"Info: %s"ANSI_COLOR_RESET"\n",log);
+        fflush(stdout);
+    }
+    else if(logType == kLogMark) {
+        //printf(ANSI_COLOR_CYAN"Mark: %s"ANSI_COLOR_RESET"\n",log);
+        //fflush(stdout);
+    }
+    else if(logType == kLogDebug) {
+        printf(ANSI_COLOR_MAGENTA"Debug: %s"ANSI_COLOR_RESET"\n",log);
+        fflush(stdout);
+    }
+    else{
+        printf("Unknown Log Item: %s\n",log);
+    }
 }
 
 void BCLMarkFunc(const char *funcNameFull,const char *funcName) {
-    printf(ANSI_COLOR_CYAN "Func: %s" ANSI_COLOR_RESET "\n",funcName);
+    //printf(ANSI_COLOR_CYAN "Func: %s" ANSI_COLOR_RESET "\n",funcName);
     fflush(stdout);
 }
 

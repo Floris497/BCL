@@ -13,7 +13,7 @@
 #include "BCLParse.h"
 #include "BCLMessage.h"
 
-int getNextObjectSocket(BCLSocket sockfd,void *obj);
+void* getNextObjectSocket(BCLSocket sockfd);
 
 
 #endif /* defined(__Basic_Control_Layer__BCLExecute__) */

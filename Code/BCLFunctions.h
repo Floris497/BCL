@@ -46,9 +46,7 @@ unsigned int maxSpeedCheck(unsigned int speed,unsigned int max);
 uint8_t getHigh8bits(uint16_t number);
 uint8_t getLow8bits(uint16_t number);
 
-void BCLLog(char *log);
-void BCLError(char *err);
-void BCLMark(char *mark);
+void BCLLog(char *log, kLogType logType);
 void BCLMarkFunc(const char *funcNameFull,const char *funcName);
 char* substring(const char* str, size_t begin, size_t len);
 

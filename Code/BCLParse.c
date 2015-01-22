@@ -33,15 +33,17 @@ void *parseObject(BCLSocket sockfd) {
     char *peek = malloc(4);
     bzero(peek, 4);
     if (recv(sockfd, peek, 3,MSG_PEEK) <= 0) {
-        BCLMark("Socked Disconnected");
+        BCLLog("Socked Disconnected",kLogError);
         return NULL;
     }
     
-    BCLMark(peek);
+    BCLLog(peek,kLogDebug);
     int type = detectMessageType(peek);
     
     if (type == kBCLMessageType_Unknown) {
+        char *buff = malloc(2);
         BCLMessageObjDiscover *object = malloc(sizeof(BCLMessageObjDiscover));
+        buff = getSocketMesg(sockfd, 1);
         object->messageType = type;
         return object;
     }
@@ -52,7 +54,7 @@ void *parseObject(BCLSocket sockfd) {
     else if (type == kBCLMessageType_Request_CP) {
         char *unused = malloc(4);
         if (recv(sockfd, unused, 3, 0) <= 0) {
-            BCLMark("Socked Disconnected");
+            BCLLog("Socked Disconnected",kLogWarning);
             return NULL;
         }
         BCLMessageObjReqCP *object = malloc(sizeof(BCLMessageObjReqCP));
@@ -63,7 +65,7 @@ void *parseObject(BCLSocket sockfd) {
     else if (type == kBCLMessageType_Request_SP) {
         char *unused = malloc(4);
         if (recv(sockfd, unused, 3, 0) <= 0) {
-            BCLMark("Socked Disconnected");
+            BCLLog("Socked Disconnected",kLogWarning);
             return NULL;
         };
         BCLMessageObjReqSP *object = malloc(sizeof(BCLMessageObjReqSP));
@@ -110,6 +112,10 @@ void *parseObject(BCLSocket sockfd) {
         return object;
     }
     
+    else if (type == kBCLMessageType_Answer_LP) {
+        return 0;
+    }
+    
 #pragma mark Instructions
 
     else if (type == kBCLMessageType_Instruction_DR) {
@@ -118,6 +124,7 @@ void *parseObject(BCLSocket sockfd) {
         object->messageType = kBCLMessageType_Instruction_DR;
         object->leftSpeed = atoi(substring(buff, 3, 5));
         object->rightSpeed = atoi(substring(buff, 8, 5));
+        BCLLog(buff,kLogDebug);
         free(buff);
         return object;
     }
@@ -125,7 +132,7 @@ void *parseObject(BCLSocket sockfd) {
     else if (type == kBCLMessageType_Instruction_ST) {
         char *unused = malloc(4);
         if (recv(sockfd, unused, 3, 0) <= 0) {
-            BCLMark("Socked Disconnected");
+            BCLLog("Socked Disconnected",kLogWarning);
             return NULL;
         };
         BCLMessageObjInsST *object = malloc(sizeof(BCLMessageObjInsST));
@@ -153,6 +160,8 @@ kBCLMessageType detectMessageType(char *peek) {
     } else if (strcmp(peek,"SPA") == 0) {
         kind = kBCLMessageType_Answer_SP;
     } else if (strcmp(peek,"DTA") == 0) {
+        kind = kBCLMessageType_Answer_LP;
+    } else if (strcmp(peek,"LPA") == 0) {
         kind = kBCLMessageType_Answer_DT;
     } else if (strcmp(peek,"DRI") == 0) {
         kind = kBCLMessageType_Instruction_DR;
@@ -167,7 +176,7 @@ void *getSocketMesg(BCLSocket sockfd, size_t size) {
     char *buffer = malloc(size + kNullCharLengt);
     bzero(buffer, size + kNullCharLengt);
     if (recv(sockfd, buffer, size, 0) <= 0) {
-        BCLMark("Socked Disconnected");
+        BCLLog("Socked Disconnected",kLogWarning);
         return NULL;
     }
     return buffer;
